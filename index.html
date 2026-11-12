@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#faf9f6; --panel:#ffffff; --ink:#1f1d1b; --muted:#7a746d; --line:#e8e4de; --hover:#f3f0ea; --bubble:#efebe4; --accent:#e0556b;
@@ -28,7 +28,8 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
 #reset.on{opacity:1;pointer-events:auto}#reset:hover{background:var(--hover);border-color:var(--accent);transform:translateX(-2px)}#reset:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
 /* home */
-#home{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding-bottom:6vh;transition:opacity .45s,transform .45s;overflow-y:auto}
+#home{flex:1;display:flex;flex-direction:column;justify-content:flex-start;align-items:center;text-align:center;padding-bottom:3vh;transition:opacity .45s,transform .45s;overflow-y:auto}
+#home>.eye{margin-top:auto}#home>.cards{margin-bottom:auto}
 #home.out{opacity:0;transform:translateY(-16px);pointer-events:none}
 .eye{margin:0 0 10px;color:var(--muted);font-size:1rem;opacity:0;animation:rise .6s cubic-bezier(.2,.8,.2,1) forwards}
 .hi em{color:var(--accent)}
@@ -98,6 +99,52 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
   #home{justify-content:flex-start;padding-top:5vh}
 }
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01s!important;animation-delay:0s!important;scroll-behavior:auto!important}}
+
+/* diary */
+.diary-card{grid-column:1/-1;border-style:dashed;border-color:var(--accent)}
+#diary{flex:1;min-height:0;display:none;flex-direction:column;align-items:center}
+#diary.on{display:flex;animation:dIn .6s cubic-bezier(.2,.8,.2,1) both}
+@keyframes dIn{from{opacity:0;transform:scale(.96) translateY(10px)}to{opacity:1;transform:none}}
+.stage{flex:1;min-height:0;width:100%;display:flex;align-items:center;justify-content:center;padding:6px 0;perspective:2200px}
+.book{position:relative;width:min(100%,470px);height:min(100%,640px)}
+.leaf{position:absolute;inset:0;transform-origin:left center;transform-style:preserve-3d;transition:transform 1.05s cubic-bezier(.65,0,.25,1);filter:drop-shadow(0 16px 26px rgba(0,0,0,.2))}
+.leaf.turned{transform:rotateY(-180deg);visibility:hidden;transition:transform 1.05s cubic-bezier(.65,0,.25,1),visibility 0s 1.05s}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:6px 16px 16px 6px;overflow:hidden}
+.face::before{content:"";position:absolute;inset:0 auto 0 0;width:26px;background:linear-gradient(90deg,rgba(0,0,0,.2),transparent);pointer-events:none;z-index:2}
+.face.back{transform:rotateY(180deg);background:#efe6d2}
+.front{background-color:#fbf6ea;background-image:linear-gradient(90deg,transparent 46px,rgba(205,90,90,.45) 46px 48px,transparent 48px),repeating-linear-gradient(#fbf6ea 0 27px,rgba(110,140,190,.28) 27px 28px)}
+.cover{background:radial-gradient(circle at 30% 20%,#4a2e28,transparent 60%),linear-gradient(135deg,#3a2420,#22110d);color:#e9cf9a;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:12px;cursor:pointer;font-family:"Caveat",cursive}
+.cover::after{content:"";position:absolute;inset:16px;border:1.5px solid rgba(233,207,154,.45);border-radius:4px 10px 10px 4px;pointer-events:none}
+.cover h2{margin:0;font-size:clamp(2.4rem,11vw,3.4rem);font-weight:700;line-height:1}
+.cover .gold{font-family:var(--sans);font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;opacity:.8}
+.cover .tap{font-size:1.3rem;margin-top:18px;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
+.pg{padding:28px 20px 16px 62px;display:flex;flex-direction:column;overflow-y:auto;color:#3b2f2a;font-family:"Caveat",cursive}
+.pg>*{flex-shrink:0}
+.pg .top{position:relative}
+.pg .vin{position:absolute;right:0;top:3px}
+.pg .num{font-size:1.05rem;color:#a2766a}
+.pg h2{margin:0;font-size:2.2rem;font-weight:700;line-height:56px;padding-right:62px;white-space:nowrap}
+.pg .film{font-size:1.05rem;color:#8b5e55;line-height:28px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pg p{margin:0;font-size:1.24rem;line-height:28px}
+.vin{width:50px;height:50px;border-radius:50%;flex:none;background:radial-gradient(circle,#c4455e 0 16%,#1b1210 17% 100%);box-shadow:inset 0 0 0 3px #2d1f1a;animation:spin 3s linear infinite;animation-play-state:paused}
+.playing .vin{animation-play-state:running}
+@keyframes spin{to{transform:rotate(360deg)}}
+.pl{margin-top:auto;padding-top:12px;font-family:var(--sans)}
+.rng{width:100%;accent-color:#c4455e;margin:0;cursor:pointer}
+.tm{display:flex;justify-content:space-between;font-size:.75rem;color:#8b7a70;margin-top:2px}
+.ctrl{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:8px}
+.pbtn{width:48px;height:48px;border-radius:50%;border:0;background:#3b2f2a;color:#fbf6ea;display:grid;place-items:center;cursor:pointer;transition:transform .2s,background .2s}
+.pbtn:hover{transform:scale(1.08);background:#c4455e}
+.sk{width:38px;height:38px;border-radius:50%;background:none;border:1px solid #b59a8f;color:#6b4f46;font:inherit;font-size:.72rem;cursor:pointer;transition:background .2s}
+.sk:hover{background:#efe6d2}
+.pbtn:focus-visible,.sk:focus-visible,.rng:focus-visible{outline:2px solid #c4455e;outline-offset:2px}
+.dnav{flex:none;display:flex;align-items:center;gap:18px;padding:8px 0 16px;color:var(--muted);font-size:.9rem}
+.dnav button{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--panel);color:var(--ink);font-size:1.1rem;cursor:pointer;transition:transform .2s,border-color .2s,opacity .2s}
+.dnav button:hover:not(:disabled){transform:scale(1.1);border-color:var(--accent)}
+.dnav button:disabled{opacity:.3;cursor:default}
+.dnav button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media (max-width:560px){.pg{padding:28px 14px 12px 54px}.pg h2{font-size:1.9rem}.pg p{font-size:1.15rem}}
 </style>
 </head>
 <body>
@@ -115,6 +162,11 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
   </section>
 
   <main id="thread" aria-live="polite"></main>
+  <section id="diary" aria-label="Diary">
+    <div class="stage"><div class="book" id="book"></div></div>
+    <div class="dnav"><button id="dprev" type="button" aria-label="Previous page">←</button><span id="dpg">Cover</span><button id="dnext" type="button" aria-label="Next page">→</button></div>
+  </section>
+
 
   <div class="dock">
     <div id="next"></div>
@@ -171,6 +223,7 @@ QA.forEach((x,i)=>{
 
 function renderNext(){
   next.innerHTML="";
+  { const d=document.createElement("button"); d.type="button"; d.className="pill"; d.textContent="📖 View your diary"; d.onclick=openDiary; next.appendChild(d); }
   QA.forEach((x,i)=>{ if(used.has(i)) return;
     const p=document.createElement("button"); p.type="button"; p.className="pill"; p.textContent=x.t;
     p.style.animationDelay=(i*.05)+"s"; p.onclick=()=>ask(i); next.appendChild(p); });
@@ -231,10 +284,91 @@ function burst(){
 inp.addEventListener("input",()=>send.disabled=!inp.value.trim());
 inp.addEventListener("keydown",e=>{if(e.key==="Enter")free()});
 send.onclick=free;
-reset.onclick=()=>{ if(busy) return; used.clear(); started=false; thread.innerHTML=""; thread.classList.remove("on"); next.innerHTML=""; next.style.display="none";
+reset.onclick=()=>{ if(busy) return; closeDiary(); used.clear(); started=false; thread.innerHTML=""; thread.classList.remove("on"); next.innerHTML=""; next.style.display="none";
   home.style.display=""; requestAnimationFrame(()=>home.classList.remove("out")); reset.classList.remove("on");
   cards.querySelectorAll(".card").forEach(c=>c.classList.remove("gone")); };
+
+/* ===== DIARY: edit the poems / songs here ===== */
+const SONGS=[
+ { t:"Humsafar", a:"Akhil Sachdeva", f:"Badrinath Ki Dulhania", y:2017, d:268.6,
+   p:"Two small-town hearts on one stubborn road. Badri thought love meant chasing; the film taught him it means walking beside. Some people never ask you to lead or follow. They only ask you to stay." },
+ { t:"In Dino", a:"Soham Chakraborty", f:"Metro… In Dino", y:2025, d:397.2,
+   p:"One restless city, a few tired hearts, and the same quiet question: what happens to love when life gets loud? The film answers softly. You can always choose each other again, even on an ordinary day." },
+ { t:"Dooriyan", a:"Pritam", f:"Love Aaj Kal", y:"", d:337.5,
+   p:"Two eras, one truth. Letters then, screens now, and distance asking both the same thing: what do you hold on to? Love keeps changing its clothes, but never its heart." },
+ { t:"Chaandaniya", a:"Mohan Kannan", f:"2 States", y:2014, d:248.0,
+   p:"Two states, two families, two ways of saying home, and a love that learned to sit at both dinner tables. It taught me love is not only two people. It is everyone you’re brave enough to bring along." },
+ { t:"Daryaa", a:"Amit Trivedi", f:"Manmarziyaan", y:2018, d:262.1,
+   p:"Wild, impatient love that runs ahead of sense, all rooftops and rain and arguments. And then, quietly, the question that matters: after the storm, who do you actually want beside you?" }
+];
+/* ============================================= */
+const diary=$("diary"), book=$("book"), dpg=$("dpg"), dprev=$("dprev"), dnext=$("dnext"), dockEl=document.querySelector(".dock");
+const PLAY='<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
+const PAUSE='<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>';
+const N=SONGS.length, leaves=[], au=new Audio();
+au.preload="metadata";
+let diaryOn=false, dcur=0, loaded=-1, blobTried=false;
+const fmt=x=>{x=Math.max(0,Math.floor(x||0));return Math.floor(x/60)+":"+String(x%60).padStart(2,"0")};
+
+function buildDiary(){
+  const c=document.createElement("div"); c.className="leaf"; c.style.zIndex=N+1;
+  c.innerHTML='<div class="face cover"><span class="gold">Private</span><h2>Chirag’s Diary</h2><span class="gold">not for anyone · except you</span><span class="tap">tap to open ♥</span></div><div class="face back"></div>';
+  c.addEventListener("click",()=>{ if(dcur===0) go(1); });
+  book.appendChild(c); leaves.push(c);
+  SONGS.forEach((x,k)=>{
+    const i=k+1, l=document.createElement("div"); l.className="leaf"; l.style.zIndex=N-k;
+    l.innerHTML=`<div class="face front pg"><div class="top"><div><h2>${x.t}</h2><div class="film">from ${x.f}${x.y?" ("+x.y+")":""}</div><div class="film">${x.a}</div></div><div class="vin"></div></div><p>${x.p}</p><div class="pl"><input class="rng" type="range" min="0" max="1000" value="0" aria-label="Seek"><div class="tm"><span class="cu">0:00</span><span class="du">${fmt(x.d)}</span></div><div class="ctrl"><button class="sk bk" type="button" aria-label="Back 10 seconds">−10</button><button class="pbtn" type="button" aria-label="Play or pause">${PLAY}</button><button class="sk fw" type="button" aria-label="Forward 10 seconds">+10</button></div></div></div><div class="face back"></div>`;
+    l.querySelector(".pbtn").onclick=()=>toggle(i);
+    l.querySelector(".rng").oninput=e=>seekFrac(i,e.target.value/1000);
+    l.querySelector(".bk").onclick=()=>skip(i,-10);
+    l.querySelector(".fw").onclick=()=>skip(i,10);
+    book.appendChild(l); leaves.push(l);
+  });
+  dprev.onclick=()=>go(dcur-1); dnext.onclick=()=>go(dcur+1); go(0,true);
+}
+function toBlobUrl(uri){ const b=atob(uri.split(",")[1]), u=new Uint8Array(b.length); for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i); return URL.createObjectURL(new Blob([u],{type:"audio/mpeg"})); }
+au.onerror=()=>{ if(!blobTried&&loaded>0&&AUDIO[loaded-1].indexOf("data:")===0){ blobTried=true; au.src=toBlobUrl(AUDIO[loaded-1]); au.play().catch(()=>{}); } };
+function ensure(i){ if(loaded!==i){ blobTried=false; au.src=AUDIO[i-1]; loaded=i; } }
+function whenReady(fn){ au.readyState>=1?fn():au.addEventListener("loadedmetadata",fn,{once:true}); }
+function toggle(i){ if(loaded!==i||au.paused){ ensure(i); au.play().catch(()=>{}); } else au.pause(); }
+function seekFrac(i,f){ ensure(i); whenReady(()=>{ au.currentTime=f*(au.duration||SONGS[i-1].d); upd(); }); }
+function skip(i,dt){ ensure(i); whenReady(()=>{ au.currentTime=Math.min(Math.max(0,au.currentTime+dt),au.duration||1e9); upd(); }); }
+function upd(){
+  const l=leaves[loaded]; if(!l||loaded<1) return;
+  const d=au.duration||SONGS[loaded-1].d, r=l.querySelector(".rng");
+  r.value=Math.round(au.currentTime/d*1000);
+  l.querySelector(".cu").textContent=fmt(au.currentTime); l.querySelector(".du").textContent=fmt(d);
+  const on=!au.paused; l.querySelector(".pbtn").innerHTML=on?PAUSE:PLAY; l.classList.toggle("playing",on);
+}
+au.ontimeupdate=upd; au.onplay=upd; au.onpause=upd; au.onended=()=>{ au.currentTime=0; upd(); };
+function resetUI(){ leaves.forEach((l,k)=>{ if(k<1) return; l.querySelector(".rng").value=0; l.querySelector(".cu").textContent="0:00"; l.querySelector(".pbtn").innerHTML=PLAY; l.classList.remove("playing"); }); }
+function go(k,silent){
+  k=Math.max(0,Math.min(N,k)); if(k===dcur&&!silent) return;
+  au.pause(); loaded=-1; au.removeAttribute("src"); resetUI();
+  dcur=k; leaves.forEach((l,j)=>l.classList.toggle("turned",j<k));
+  dpg.textContent=k===0?"Cover":"Page "+k+" of "+N; dprev.disabled=k===0; dnext.disabled=k===N;
+  if(k>=1&&!silent){ ensure(k); au.play().catch(()=>{}); }
+}
+function openDiary(){
+  if(busy||diaryOn) return; diaryOn=true; started=true; reset.classList.add("on");
+  home.classList.add("out"); thread.classList.remove("on"); dockEl.style.display="none";
+  setTimeout(()=>{ home.style.display="none"; diary.classList.add("on"); },420);
+}
+function closeDiary(){
+  if(!diaryOn) return; diaryOn=false; au.pause(); loaded=-1; au.removeAttribute("src"); resetUI();
+  leaves.forEach(l=>{ l.style.transition="none"; l.classList.remove("turned"); }); void book.offsetWidth; leaves.forEach(l=>l.style.transition="");
+  dcur=0; dpg.textContent="Cover"; dprev.disabled=true; dnext.disabled=false;
+  diary.classList.remove("on"); dockEl.style.display="";
+}
+document.addEventListener("keydown",e=>{ if(!diaryOn||e.target.tagName==="INPUT") return; if(e.key==="ArrowRight") go(dcur+1); if(e.key==="ArrowLeft") go(dcur-1); });
+let sx=null;
+diary.addEventListener("touchstart",e=>{ sx=e.target.closest(".rng")?null:e.touches[0].clientX; },{passive:true});
+diary.addEventListener("touchend",e=>{ if(sx===null) return; const dx=e.changedTouches[0].clientX-sx; sx=null; if(Math.abs(dx)>60) go(dcur+(dx<0?1:-1)); });
+{ const dc=document.createElement("button"); dc.type="button"; dc.className="card diary-card"; dc.style.animationDelay=".4s";
+  dc.innerHTML="<b>📖 View your diary</b><span>Pages you never show anyone</span>"; dc.onclick=openDiary; cards.insertBefore(dc,cards.firstChild); }
+buildDiary();
 next.style.display="none";
 </script>
+<script>var AUDIO=["song1.mp3","song2.mp3","song3.mp3","song4.mp3","song5.mp3"];</script>
 </body>
 </html>
